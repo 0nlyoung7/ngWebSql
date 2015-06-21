@@ -1,0 +1,27 @@
+<ion-view view-title="Dashboard">
+
+  <ion-nav-buttons side="right">
+    <div class="no-drag" >
+      <button class="button icon ion-arrow-graph-up-right" ng-click="generateData();" ></button>
+
+      <button class="button icon ion-ios-trash-outline" ng-click="deleteData();" ></button>
+    </div>
+  </ion-nav-buttons>
+
+  <ion-content class="padding">
+
+    <div class="list card" ng-repeat="panel in panels" >
+      <div class="item-divider-new {{panel.style}}"></div>
+      <div class="item item-body item-icon-right font-{{panel.style}}">
+        <div class="h3 font-{{panel.style}}">
+          {{panel.title}}
+        </div>
+        <i class="icon ion-clipboard"></i>
+      </div>
+      <div class="item no-top-border">
+        {{panel.content}}
+      </div>      
+    </div>
+
+  </ion-content>
+</ion-view>
