@@ -42,6 +42,9 @@ Usage
 JSON 형태로 정의된 Table List 를 기준으로 Table을 생성한다.
 기존 DB가 있을 경우 생성하지 않으나,
 기존 DB와 현재 생성하고자 하는 DB의 version이 다른 경우 기존 DB를 삭제하고 신규 DB를 생성한다.
+DB 스키마를 변경하고자 할 경우, DB 설정의 version을 변경하면 된다.
+
+![alt tag](https://raw.githubusercontent.com/0nlyoung7/ngWebSql/master/www/img/db.png)
 
 #### Example:
 ```javascript
@@ -76,5 +79,70 @@ JSON 형태로 정의된 Table List 를 기준으로 Table을 생성한다.
     };
 
     $db.init( db_config );
+```
 
+### query
+#### `query( string query, array binding )`
+
+query 와 binding을 인자로 받아 query를 실행한다.
+
+1. SELECT
+
+```javascript
+var query = "SELECT title, message, style FROM TB_PANEL ORDER BY pid ASC; ";
+$db.query( query ).then(function(result) {
+  callback( $db.fetchAll(result) );
+});
+
+```
+
+2. INSERT, UPDATE, DELETE
+```javascript
+var query = "INSERT INTO TB_PANEL( pid, title, message, style, time ) VALUES ( ?, ?, ?, ?, ? );" ;
+$db.query( query ).then(function(result) {
+  callback( result );
+});
+
+```
+
+### fetchAll
+#### `fetch( SQLResultSet result )`
+
+SQL `SELECT`을 수행한 결과 수행된 결과를 받아 JSONArray 형태로 변환하여 return 한다.
+
+```javascript
+$db.fetchAll(result)
+```
+
+### queryAll
+#### `queryAll( array querys, array conds)`
+
+다수의 query를 한번에 호출할 때 사용한다. 내부에서 하나의 transaction을 사용하게 되어 있다.
+
+```javascript
+var querys = [];
+var conds = [];
+
+for( var inx = 0 ; inx < jsonArray.length ; inx++ ){
+  var jsonObj = jsonArray[inx];
+
+  var query = "INSERT OR REPLACE INTO TB_PANEL( pid, title, message, style, time ) ";
+  query +=" VALUES ( ?, ?, ?, ?, ? )";
+
+  var currentTimestamp = Date.now();
+  var cond = [
+    jsonObj.pid,
+    jsonObj.title,
+    jsonObj.message,
+    jsonObj.style,
+    currentTimestamp
+  ];
+
+  querys.push( query );
+  conds.push( cond );
+}
+
+$db.queryAll(querys, conds).then(function(result) {
+  callback( result );
+});
 ```

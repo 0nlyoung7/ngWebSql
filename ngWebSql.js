@@ -106,15 +106,14 @@
      *
      * @description Remove all data from local DB
      * 모든 DB에서 data를 삭제한다.
-     * @param {string} userId 
      */
-    self.clearAll = function( userId ){
+    self.clearAll = function(){
       var querys = [];
       var conds = [];
       angular.forEach(DB_CONFIG.tables, function(table) {
         var columns = [];
 
-        var query = 'DELETE FROM ' + table.name + ' WHERE owner_id = ? ';
+        var query = 'DELETE FROM ' + table.name;
         querys.push( query );
         conds.push( [userId] );
       });  
