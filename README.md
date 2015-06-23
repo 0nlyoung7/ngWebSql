@@ -35,14 +35,20 @@ Web DB의 query는 SQLite 기준으로 작성하면 된다.
 Usage
 ---------------------
 
-## Database Methods
 ### init
 #### `init(object config)`
 
-JSON 형태로 정의된 Table List 를 기준으로 Table을 생성한다.
-기존 DB가 있을 경우 생성하지 않으나,
-기존 DB와 현재 생성하고자 하는 DB의 version이 다른 경우 기존 DB를 삭제하고 신규 DB를 생성한다.
-DB 스키마를 변경하고자 할 경우, DB 설정의 version을 변경하면 된다.
+1. JSON 형태로 정의된 Table List 를 기준으로 Table을 생성한다.
+ - 기존 DB 가 없을 경우 -> Table 생성
+ - 기존 DB와 현재 DB의 version이 같을 경우 -> Table 생성X
+ - 기존 DB와 현재 DB의 version이 다를 경우 -> 기존 DB Drop 후 신규 스키마로 DB 생성
+   -> DB 스키마를 변경하고자 할 경우, DB 설정의 `version`을 변경하면 된다.
+
+2. `table_index` 를 이용하연 Table Index를 생성할 수 있다.
+ - type : INDEX 타입. 일반인덱스를 생성할지, UNIQUE 인덱스를 생성할지 정함
+ - name : INDEX 이름
+ - columns : INDEX를 사용할 컬럼
+
 
 ![alt tag](https://raw.githubusercontent.com/0nlyoung7/ngWebSql/master/www/img/db.png)
 
@@ -146,3 +152,11 @@ $db.queryAll(querys, conds).then(function(result) {
   callback( result );
 });
 ```
+
+Tips
+---------------------
+1. WEB DB를 완전히 삭제하기 위해서는 브라우져의 캐쉬와 데이터를 삭제한다.
+
+2. 다른 사용자로 접속할 경우, 조회 범위를 제한하기 위한 컬럼을 사용한다.( owner_id )
+
+3. 중요한 Data일 경우 암호화를 고려해야한다.
