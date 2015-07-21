@@ -155,6 +155,7 @@ $db.queryAll(querys, conds).then(function(result) {
 
 Tips
 ---------------------
+
 1. WEB DB를 완전히 삭제하기 위해서는 브라우져의 캐쉬와 데이터를 삭제한다.
 
 2. 다른 사용자로 접속할 경우, 조회 범위를 제한하기 위한 컬럼을 사용한다.( owner_id )
